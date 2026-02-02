@@ -1,0 +1,7 @@
+{
+  "name": "lagersystem",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
