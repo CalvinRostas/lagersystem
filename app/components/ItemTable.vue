@@ -2,23 +2,31 @@
     <div>
         <p>Gegenstände</p>
         <div class="w-full">
-            <div class="py-3">
-                <UiDivider class="pb-3" />
-                <div class="w-full flex items-center px-3">
-                    <div class="flex-1">
-                        <UiAvatar src="https://picsum.photos/128" alt="Colm Tuite" fallback="CT" :delay-ms="600" />
-                    </div>
-                    <div class="flex-1">
-                        <p>Colm Tuite</p>
-                    </div>
-                    <div class="flex-1 flex justify-end">
-                        <UiButton size="icon" variant="outline">
-                            <Icon class="size-4" name="lucide:pen" />
-                        </UiButton>
-                    </div>
-                </div>
-                <UiDivider class="pt-3" />
-            </div>
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th>Bild</th>
+                        <th>Name</th>
+                        <th>Aktion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="i in 10" :key="i" class="text-center">
+                        <td class="flex justify-center items-center">
+                            <UiAvatar src="https://picsum.photos/128" alt="Colm Tuite" fallback="CT" :delay-ms="600" />
+                        </td>
+                        <td>Test</td>
+                        <td class="flex items-center justify-center gap-3">
+                            <UiButton size="icon" variant="outline">
+                                <Icon class="size-4" name="lucide:eye" />
+                            </UiButton>
+                            <UiButton size="icon" variant="outline">
+                                <Icon class="size-4" name="lucide:pen" />
+                            </UiButton>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
