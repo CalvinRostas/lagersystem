@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/icon",
     "@nuxt/fonts",
+    "@nuxthub/core"
   ],
 
   css: ["./app/assets/css/main.css"],
@@ -51,4 +52,8 @@ export default defineNuxtConfig({
     fetchTimeout: 2000,
     serverBundle: "local",
   },
+
+  hub: {
+    db: 'sqlite'
+  }
 });
