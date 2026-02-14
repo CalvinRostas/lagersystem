@@ -5,4 +5,3 @@
     <!-- </ion-router-outlet> -->
   </ion-app>
 </template>
-<!-- <NuxtPage /> -->
