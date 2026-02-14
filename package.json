@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "sync:capacitor": "npm i && npm run generate && npx cap sync",
-    "dev:clean": "npx nuxt cleanup && nuxt dev"
+    "dev:clean": "npx nuxt cleanup && nuxt dev",
+    "sim:android": "npx cap run android"
   },
   "dependencies": {
     "@capacitor/android": "8.0.2",
@@ -27,7 +28,6 @@
     "@vueuse/nuxt": "^14.2.0",
     "motion-v": "^1.10.2",
     "nuxt": "^4.3.0",
-    "reka-ui": "^2.8.0",
     "tailwind-merge": "^3.4.0",
     "tailwind-variants": "^3.2.2",
     "tailwindcss": "^4.1.18",
