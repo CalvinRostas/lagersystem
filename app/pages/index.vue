@@ -4,6 +4,9 @@
             <IonToolbar>
                 <IonTitle class="mx-3">Meine Gegenstände</IonTitle>
                 <IonButtons slot="end">
+                    <IonButton id="add-trigger" aria-label="Neues Element anlegen">
+                        <IonIcon :icon="ioniconsAddOutline" />
+                    </IonButton>
                     <IonButton id="search-trigger" aria-label="Suche bei Namen oder mit QR-Code" @click="onSearchClick">
                         <IonIcon :icon="ioniconsSearchOutline" />
                     </IonButton>
@@ -52,6 +55,18 @@
                 </IonItem>
             </IonList>
         </IonContent>
+        <IonPopover trigger="add-trigger" trigger-action="click" :dismiss-on-select="true">
+            <IonContent class="ion-padding">
+                <IonList>
+                    <IonItem button :detail="false" @click="onAddItem">
+                        <IonLabel>Item</IonLabel>
+                    </IonItem>
+                    <IonItem button :detail="false" @click="onAddStorageLocation">
+                        <IonLabel>Storage location</IonLabel>
+                    </IonItem>
+                </IonList>
+            </IonContent>
+        </IonPopover>
         <SearchDrawer v-model="searchDrawerOpen" />
     </IonPage>
 </template>
@@ -74,6 +89,16 @@ const searchDrawerOpen = ref(false)
 function onSearchClick() {
     searchDrawerOpen.value = true
     console.log("searchDrawerOpen", searchDrawerOpen.value)
+}
+
+/** Navigate to create item page */
+function onAddItem() {
+    navigateTo("/item/create")
+}
+
+/** Navigate to create storage location page */
+function onAddStorageLocation() {
+    // navigateTo("/storage-location/create-")
 }
 
 /** View item – placeholder for future implementation. */
