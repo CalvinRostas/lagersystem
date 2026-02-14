@@ -86,6 +86,8 @@ useHead({
 const { items } = useItems()
 const searchDrawerOpen = ref(false)
 
+const router = useIonRouter()
+
 function onSearchClick() {
     searchDrawerOpen.value = true
     console.log("searchDrawerOpen", searchDrawerOpen.value)
@@ -102,9 +104,10 @@ function onAddStorageLocation() {
 }
 
 /** View item – placeholder for future implementation. */
-function onViewItem(_item: Item) {
-    // TODO: Navigate to view item
+function onViewItem(item: Item) {
+    router.push(`/item/${item.id}`)
 }
+
 
 /** Edit item – placeholder for future implementation. */
 function onEditItem(_item: Item) {

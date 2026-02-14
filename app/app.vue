@@ -1,5 +1,8 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <!-- <ion-router-outlet> -->
+    <NuxtPage />
+    <!-- </ion-router-outlet> -->
   </ion-app>
 </template>
+<!-- <NuxtPage /> -->

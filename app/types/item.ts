@@ -8,4 +8,6 @@ export interface Item {
   description?: string;
   /** Optional image URL (thumbnail) for the item. */
   imageUrl?: string;
+  /** Optional QR code image (data URL) for the item ID. */
+  qrCodeDataUrl?: string;
 }

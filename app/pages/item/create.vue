@@ -43,26 +43,30 @@ useHead({
     title: "Item erstellen",
 })
 
-// const { addItem } = useItems()
+const { addItem } = useItems()
+
+const router = useIonRouter()
 
 const name = ref("")
 const description = ref("")
 const nameTouched = ref(false)
 const nameErrorId = "item-name-error"
 
-function onSubmit() {
-    // nameTouched.value = true
-    // if (name.value.trim().length === 0) {
-    //     return
-    // }
+async function onSubmit() {
+    nameTouched.value = true
+    if (name.value.trim().length === 0) {
+        return
+    }
 
-    // addItem({
-    //     name: name.value.trim(),
-    //     description: description.value,
-    // })
+    const created = await addItem({
+        name: name.value.trim(),
+        description: description.value,
+    })
 
-    // name.value = ""
-    // description.value = ""
-    // nameTouched.value = false
+    name.value = ""
+    description.value = ""
+    nameTouched.value = false
+
+    router.push(`/item/${created.id}`)
 }
 </script>
