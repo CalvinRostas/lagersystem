@@ -13,7 +13,9 @@
         </IonContent>
 
         <SearchDrawer v-model="searchDrawerOpen" title="Search items" input-label="Search items"
-            input-placeholder="Enter item..." input-aria-label="Search items" qr-button-label="Scan item QR code" />
+            input-placeholder="Enter item..." input-aria-label="Search items" qr-button-label="Scan item QR code"
+            :items="items" :result-leading-icon="ioniconsCubeOutline" :show-create-button="true"
+            create-button-label="Create item" @select="onSelectItem" @create="onAddItem" />
     </IonPage>
 </template>
 
@@ -33,6 +35,7 @@ const { items } = useItems()
 const searchDrawerOpen = ref(false)
 
 const router = useIonRouter()
+
 const segmentOptions = [
     { value: "items", label: "Items" },
     { value: "storage", label: "Storage" },
@@ -56,7 +59,7 @@ function onAddItem() {
 
 /** Navigate to create storage location page */
 function onAddStorageLocation() {
-    // navigateTo("/storage-location/create-")
+    navigateTo("/storage-location/create")
 }
 
 /** View item – placeholder for future implementation. */
@@ -68,5 +71,9 @@ function onViewItem(item: Item) {
 /** Edit item – placeholder for future implementation. */
 function onEditItem(_item: Item) {
     // TODO: Navigate to edit item
+}
+
+function onSelectItem(item: Item) {
+    router.push(`/item/${item.id}`)
 }
 </script>
