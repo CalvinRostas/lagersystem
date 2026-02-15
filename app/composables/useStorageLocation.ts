@@ -15,13 +15,27 @@ const MOCK_STORAGE_LOCATIONS: StorageLocation[] = [
 
 const STORAGE_KEY = "lagersystem-storage-locations";
 const storageLocations = useLocalStorage<StorageLocation[]>(STORAGE_KEY, [...MOCK_STORAGE_LOCATIONS]);
-// const storageTemp: StorageLocation[] = []
 export const useUseStorageLocation = () => {
+  /**
+   * Returns all storage locations.
+   * @returns {StorageLocation[]} Array of all storage locations
+   */
   const getAll = () => storageLocations.value
 
+  /**
+   * Finds a storage location by its unique ID.
+   * @param {string} id - The ID of the storage location to retrieve
+   * @returns {StorageLocation | undefined} The found storage location or undefined if not found
+   */
   const getById = (id: string) =>
     storageLocations.value.find((location) => location.id === id)
 
+  /**
+   * Creates a new storage location and adds it to the list.
+   * Generates a unique ID and QR code for the location.
+   * @param {Omit<StorageLocation, "id" | "qrCodeDataUrl">} payload - The location data without ID and QR code
+   * @returns {Promise<StorageLocation>} The newly created storage location
+   */
   const create = async (payload: Omit<StorageLocation, "id" | "qrCodeDataUrl">) => {
     const id = generateId();
     const qrCodeDataUrl = await generateQRCode(id);
@@ -37,6 +51,11 @@ export const useUseStorageLocation = () => {
     return newLocation;
   }
 
+  /**
+   * Removes a storage location by its ID.
+   * @param {string} id - The ID of the storage location to remove
+   * @returns {boolean} True if the location was removed, false if not found
+   */
   const remove = (id: string) => {
     const index = storageLocations.value.findIndex(
       (location) => location.id === id,
@@ -48,6 +67,12 @@ export const useUseStorageLocation = () => {
     return true
   }
 
+  /**
+   * Updates an existing storage location with the given changes.
+   * @param {string} id - The ID of the storage location to update
+   * @param {Partial<StorageLocation>} changes - The changes to apply
+   * @returns {boolean} True if the location was updated, false if not found
+   */
   const update = (id: string, changes: Partial<StorageLocation>) => {
     const location = storageLocations.value.find(
       (item) => item.id === id,
@@ -61,7 +86,6 @@ export const useUseStorageLocation = () => {
 
   return {
     storageLocations,
-    // storageTemp,
     getAll,
     getById,
     create,
