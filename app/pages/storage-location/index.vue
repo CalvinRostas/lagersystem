@@ -1,39 +1,18 @@
 <template>
   <IonPage>
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle class="mx-3">Storage Locations</IonTitle>
-      </IonToolbar>
-    </IonHeader>
+    <PageHeaderActions title="Storage Locations" :show-segment="true" segment-value="storage"
+      :segment-options="segmentOptions" @segment-change="onSegmentChange" :show-add="true" :show-search="true"
+      @search="onSearchClick" />
 
     <IonContent :fullscreen="true">
-      <div v-if="storageLocations.length === 0"
-        class="flex flex-col items-center justify-center min-h-[60vh] p-4 text-center">
-        <IonIcon :icon="ioniconsLocationOutline" class="text-[80px] text-muted-foreground mb-4" />
-        <h2 class="text-xl font-semibold mb-2 text-black">
-          Keine Storage Locations gefunden
-        </h2>
-        <p class="text-[0.9375rem] text-muted-foreground max-w-70 leading-snug m-0">
-          Erstellen Sie Storage Locations, um sie hier anzuzeigen.
-        </p>
-      </div>
-      <IonList v-else lines="full" class="ion-no-padding">
-        <IonItem v-for="location in storageLocations" :key="location.id" class="[--padding-end:0]">
-          <div slot="start" class="shrink-0">
-            <div class="size-10 overflow-hidden bg-muted flex items-center justify-center rounded-full mx-3 my-2"
-              aria-hidden>
-              <IonIcon :icon="ioniconsLocationOutline" class="text-2xl text-muted-foreground" aria-hidden />
-            </div>
-          </div>
-          <IonLabel>
-            <h2>{{ location.name }}</h2>
-            <p v-if="location.description" class="ion-text-wrap">
-              {{ location.description }}
-            </p>
-          </IonLabel>
-        </IonItem>
-      </IonList>
+      <EntityList :items="storageLocations" empty-title="No storage locations found"
+        empty-description="Create storage locations to see them here." :empty-icon="ioniconsLocationOutline"
+        :leading-icon="ioniconsLocationOutline" />
     </IonContent>
+
+    <SearchDrawer v-model="searchDrawerOpen" title="Search storage locations" input-label="Search storage locations"
+      input-placeholder="Enter storage location..." input-aria-label="Search storage locations"
+      qr-button-label="Scan storage QR code" />
   </IonPage>
 </template>
 
@@ -49,4 +28,19 @@ useHead({
 })
 
 const { storageLocations } = useUseStorageLocation()
+const searchDrawerOpen = ref(false)
+const segmentOptions = [
+  { value: "items", label: "Items" },
+  { value: "storage", label: "Storage" },
+]
+
+function onSegmentChange(value: string) {
+  if (value === "items") {
+    navigateTo("/")
+  }
+}
+
+function onSearchClick() {
+  searchDrawerOpen.value = true
+}
 </script>

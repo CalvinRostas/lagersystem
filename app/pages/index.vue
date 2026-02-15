@@ -1,73 +1,19 @@
 <template>
     <IonPage>
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle class="mx-3">Meine Gegenstände</IonTitle>
-                <IonButtons slot="end">
-                    <IonButton id="add-trigger" aria-label="Neues Element anlegen">
-                        <IonIcon :icon="ioniconsAddOutline" />
-                    </IonButton>
-                    <IonButton id="search-trigger" aria-label="Suche bei Namen oder mit QR-Code" @click="onSearchClick">
-                        <IonIcon :icon="ioniconsSearchOutline" />
-                    </IonButton>
-                </IonButtons>
-            </IonToolbar>
-        </IonHeader>
+        <PageHeaderActions title="My Items" :add-icon="ioniconsAddOutline" :search-icon="ioniconsSearchOutline"
+            :show-segment="true" segment-value="items" :segment-options="segmentOptions"
+            @segment-change="onSegmentChange" @add-item="onAddItem" @add-storage-location="onAddStorageLocation"
+            @search="onSearchClick" />
 
         <IonContent :fullscreen="true">
-            <div v-if="items.length === 0"
-                class="flex flex-col items-center justify-center min-h-[60vh] p-4 text-center">
-                <IonIcon :icon="ioniconsCubeOutline" class="text-[80px] text-muted-foreground mb-4" />
-                <h2 class="text-xl font-semibold mb-2 text-black">
-                    Keine Gegenstände gefunden
-                </h2>
-                <p class="text-[0.9375rem] text-muted-foreground max-w-70 leading-snug m-0">
-                    Fügen Sie Gegenstände hinzu, um sie angezeigt zu bekommen. Verwenden Sie die Suche oben, um
-                    Gegenstände nach Name oder QR-Code zu finden.
-                </p>
-            </div>
-            <IonList v-else lines="full" class="ion-no-padding">
-                <IonItem v-for="item in items" :key="item.id" class="[--padding-end:0]">
-                    <div slot="start" class="shrink-0">
-                        <div class="size-10 overflow-hidden bg-muted flex items-center justify-center rounded-full mx-3 my-2"
-                            aria-hidden>
-                            <img v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name"
-                                class="size-full object-cover" loading="lazy" />
-                            <IonIcon v-else :icon="ioniconsImageOutline" class="text-2xl text-muted-foreground"
-                                aria-hidden />
-                        </div>
-                    </div>
-                    <IonLabel>
-                        <h2>{{ item.name }}</h2>
-                        <p v-if="item.description" class="ion-text-wrap">
-                            {{ item.description }}
-                        </p>
-                    </IonLabel>
-                    <div slot="end"
-                        class="flex items-center [&_ion-button]:[--padding-start:8px] [&_ion-button]:[--padding-end:8px] [&_ion-button]:m-0">
-                        <IonButton fill="clear" size="small" aria-label="View item" @click="onViewItem(item)">
-                            <IonIcon :icon="ioniconsEyeOutline" slot="icon-only" />
-                        </IonButton>
-                        <IonButton fill="clear" size="small" aria-label="Edit item" @click="onEditItem(item)">
-                            <IonIcon :icon="ioniconsCreateOutline" slot="icon-only" />
-                        </IonButton>
-                    </div>
-                </IonItem>
-            </IonList>
+            <EntityList :items="items" empty-title="No items found"
+                empty-description="Add items to see them here. Use the search above to find items by name or QR code."
+                :empty-icon="ioniconsCubeOutline" :leading-icon="ioniconsImageOutline" :show-actions="true"
+                @view="onViewItem" @edit="onEditItem" />
         </IonContent>
-        <IonPopover trigger="add-trigger" trigger-action="click" :dismiss-on-select="true">
-            <IonContent class="ion-padding">
-                <IonList>
-                    <IonItem button :detail="false" @click="onAddItem">
-                        <IonLabel>Item</IonLabel>
-                    </IonItem>
-                    <IonItem button :detail="false" @click="onAddStorageLocation">
-                        <IonLabel>Storage location</IonLabel>
-                    </IonItem>
-                </IonList>
-            </IonContent>
-        </IonPopover>
-        <SearchDrawer v-model="searchDrawerOpen" />
+
+        <SearchDrawer v-model="searchDrawerOpen" title="Search items" input-label="Search items"
+            input-placeholder="Enter item..." input-aria-label="Search items" qr-button-label="Scan item QR code" />
     </IonPage>
 </template>
 
@@ -76,21 +22,31 @@ import type { Item } from "~/types/item"
 import { useItems } from "~/composables/useItems"
 
 defineOptions({
-    name: "Gegenstände",
+    name: "Items",
 })
 
 useHead({
-    title: "Meine Gegenstände",
+    title: "My Items",
 })
 
 const { items } = useItems()
 const searchDrawerOpen = ref(false)
 
 const router = useIonRouter()
+const segmentOptions = [
+    { value: "items", label: "Items" },
+    { value: "storage", label: "Storage" },
+]
 
 function onSearchClick() {
     searchDrawerOpen.value = true
     console.log("searchDrawerOpen", searchDrawerOpen.value)
+}
+
+function onSegmentChange(value: string) {
+    if (value === "storage") {
+        navigateTo("/storage-location")
+    }
 }
 
 /** Navigate to create item page */
