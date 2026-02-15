@@ -2,71 +2,83 @@
     <IonPage>
         <IonHeader>
             <IonToolbar>
-                <IonTitle>Item erstellen</IonTitle>
+                <IonButtons slot="start">
+                    <IonButton @click="() => navigateTo('/')">
+                        <IonIcon :icon="ioniconsArrowBackOutline" slot="start" />
+                        Back
+                    </IonButton>
+                </IonButtons>
+                <IonTitle>Create Item</IonTitle>
             </IonToolbar>
         </IonHeader>
+
         <IonContent :fullscreen="true" class="ion-padding">
-            <form @submit.prevent="onSubmit" class="flex flex-col gap-6">
-                <IonList class="ion-no-padding">
-                    <IonItem lines="full">
-                        <IonLabel position="stacked">Name *</IonLabel>
-                        <IonInput v-model="name" type="text" placeholder="Name eingeben"
-                            :aria-invalid="nameTouched && name.trim().length === 0" :aria-describedby="nameErrorId"
-                            @ionBlur="nameTouched = true" />
-                    </IonItem>
-                    <IonText v-if="nameTouched && name.trim().length === 0" color="danger" :id="nameErrorId">
-                        <p class="mt-2">Name ist erforderlich.</p>
-                    </IonText>
+            <EntityForm name-label="Name" name-placeholder="Enter name" name-error-message="Name is required."
+                description-label="Description" description-placeholder="Enter description" submit-label="Save"
+                :disabled="!selectedStorageLocation" @submit="onSubmit">
 
-                    <IonItem lines="full">
-                        <IonLabel position="stacked">Beschreibung</IonLabel>
-                        <IonTextarea v-model="description" placeholder="Beschreibung eingeben" :auto-grow="true" />
-                    </IonItem>
-                </IonList>
-
-                <IonButton type="submit" expand="block" :disabled="name.trim().length === 0">
-                    Speichern
+                <IonButton expand="block" class="mt-2 px-4" @click="searchDrawerOpen = true">
+                    Select storage location
                 </IonButton>
-            </form>
+                <IonText class="text-sm text-muted-foreground">
+                    <p class="mt-2 mb-0">
+                        <span v-if="selectedStorageLocation">
+                            Selected: {{ selectedStorageLocation.name }}
+                            <span v-if="selectedStorageLocation.description"> - {{ selectedStorageLocation.description
+                                }}</span>
+                        </span>
+                        <span v-else class="px-4">
+                            No storage location selected.
+                        </span>
+                    </p>
+                </IonText>
+
+            </EntityForm>
         </IonContent>
+
+        <SearchDrawer v-model="searchDrawerOpen" title="Search storage locations" input-label="Search storage locations"
+            input-placeholder="Enter storage location..." input-aria-label="Search storage locations"
+            qr-button-label="Scan storage QR code" :items="storageLocations"
+            :result-leading-icon="ioniconsLocationOutline" :show-create-button="true"
+            create-button-label="Create storage location" @select="onSelectStorageLocation"
+            @create="onCreateStorageLocation" />
+
     </IonPage>
 </template>
 
 <script lang="ts" setup>
 import { useItems } from "~/composables/useItems"
+import type { StorageLocation } from "~/composables/useStorageLocation"
 
 defineOptions({
     name: "CreateItem",
 })
 
 useHead({
-    title: "Item erstellen",
+    title: "Create Item",
 })
 
-const { addItem } = useItems()
+const { storageLocations } = useUseStorageLocation()
+const searchDrawerOpen = ref(false)
+const selectedStorageLocation = ref<StorageLocation | null>(null)
+
+const { create } = useItems()
 
 const router = useIonRouter()
 
-const name = ref("")
-const description = ref("")
-const nameTouched = ref(false)
-const nameErrorId = "item-name-error"
-
-async function onSubmit() {
-    nameTouched.value = true
-    if (name.value.trim().length === 0) {
-        return
-    }
-
-    const created = await addItem({
-        name: name.value.trim(),
-        description: description.value,
+async function onSubmit(data: { name: string; description: string }) {
+    const created = await create({
+        ...data,
+        storageLocationId: selectedStorageLocation.value?.id,
     })
-
-    name.value = ""
-    description.value = ""
-    nameTouched.value = false
-
     router.push(`/item/${created.id}`)
+}
+
+function onSelectStorageLocation(location: StorageLocation) {
+    selectedStorageLocation.value = location
+}
+
+function onCreateStorageLocation() {
+    router.push("/storage-location/create")
 }
 </script>
