@@ -80,18 +80,37 @@ const MOCK_ITEMS: Item[] = [
 
 const STORAGE_KEY = "lagersystem-items";
 const items = useLocalStorage<Item[]>(STORAGE_KEY, [...MOCK_ITEMS]);
-// const itemTemp: Item[] = []
 /**
  * Composable for the items list. Replace with real data source (API, Capacitor Storage, etc.) later.
  */
 export const useItems = () => {
+  /**
+   * Returns all items in the storage.
+   * @returns {Item[]} Array of all items
+   */
   const getAll = () => items.value;
 
+  /**
+   * Finds an item by its unique ID.
+   * @param {string} id - The ID of the item to retrieve
+   * @returns {Item | undefined} The found item or undefined if not found
+   */
   const getById = (id: string) => items.value.find((item) => item.id === id);
 
+  /**
+   * Retrieves all items stored at a specific storage location.
+   * @param {string} storageLocationId - The ID of the storage location
+   * @returns {Item[]} Array of items at the given storage location
+   */
   const getByStorageLocation = (storageLocationId: string) =>
     items.value.filter((item) => item.storageLocationId === storageLocationId);
 
+  /**
+   * Creates a new item and adds it to the storage.
+   * Generates a unique ID and QR code for the item.
+   * @param {Omit<Item, "id" | "qrCodeDataUrl">} payload - The item data without ID and QR code
+   * @returns {Promise<Item>} The newly created item
+   */
   const create = async (payload: Omit<Item, "id" | "qrCodeDataUrl">) => {
     const id = generateId();
     const qrCodeDataUrl = await generateQRCode(id);
@@ -111,6 +130,11 @@ export const useItems = () => {
     return newItem;
   };
 
+  /**
+   * Removes an item by its ID.
+   * @param {string} id - The ID of the item to remove
+   * @returns {boolean} True if the item was removed, false if not found
+   */
   const remove = (id: string) => {
     const index = items.value.findIndex((item) => item.id === id);
     if (index === -1) {
@@ -120,6 +144,12 @@ export const useItems = () => {
     return true;
   };
 
+  /**
+   * Updates an existing item with the given changes.
+   * @param {string} id - The ID of the item to update
+   * @param {Partial<Omit<Item, "id">>} changes - The changes to apply (excluding ID)
+   * @returns {boolean} True if the item was updated, false if not found
+   */
   const update = (id: string, changes: Partial<Omit<Item, "id">>) => {
     const item = items.value.find((item) => item.id === id);
     if (!item) {
@@ -131,7 +161,6 @@ export const useItems = () => {
 
   return {
     items,
-    // itemTemp,
     getAll,
     getById,
     getByStorageLocation,
@@ -140,27 +169,3 @@ export const useItems = () => {
     update,
   };
 };
-
-// async function create(payload: Omit<Item, "id" | "qrCodeDataUrl">) {
-//   const id = typeof crypto !== "undefined" && "randomUUID" in crypto
-//     ? crypto.randomUUID()
-//     : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-
-//   let qrCodeDataUrl: string | undefined;
-//   try {
-//     qrCodeDataUrl = await QRCode.toDataURL(id, { margin: 1, width: 256 });
-//   } catch {
-//     qrCodeDataUrl = undefined;
-//   }
-
-//   const newItem: Item = {
-//     id,
-//     name: payload.name,
-//     description: payload.description?.trim() ? payload.description.trim() : undefined,
-//     imageUrl: payload.imageUrl,
-//     qrCodeDataUrl,
-//   };
-
-//   items.value = [newItem, ...items.value];
-//   return newItem;
-// }

@@ -1,5 +1,11 @@
 <template>
-  <IonModal :is-open="open" :breakpoints="[0, 0.5, 0.75]" :initial-breakpoint="0.5" handle @did-dismiss="close">
+  <IonModal
+    :is-open="open"
+    :breakpoints="[0, 0.5, 0.75]"
+    :initial-breakpoint="0.5"
+    handle
+    @did-dismiss="close"
+  >
     <IonHeader>
       <IonToolbar>
         <IonTitle class="mx-3">{{ title }}</IonTitle>
@@ -14,29 +20,64 @@
       <div class="flex flex-col gap-4 mt-5">
         <IonItem lines="none" class="pl-0">
           <IonLabel position="stacked">{{ inputLabel }}</IonLabel>
-          <IonInput v-model="searchQuery" type="text" :placeholder="inputPlaceholder" clear-input
-            :aria-label="inputAriaLabel" />
+          <IonInput
+            v-model="searchQuery"
+            type="text"
+            :placeholder="inputPlaceholder"
+            clear-input
+            :aria-label="inputAriaLabel"
+          />
         </IonItem>
-        <IonButton expand="block" size="default" @click="onScanQrClick" class="px-4">
+        <IonButton
+          expand="block"
+          size="default"
+          @click="onScanQrClick"
+          class="px-4"
+        >
           <IonIcon :icon="ioniconsQrCodeOutline" slot="start" class="mr-2" />
           {{ qrButtonLabel }}
         </IonButton>
-        <IonText v-if="scanError" color="danger" class="text-sm block mt-1 px-4">{{ scanError }}</IonText>
+        <IonText
+          v-if="scanError"
+          color="danger"
+          class="text-sm block mt-1 px-4"
+          >{{ scanError }}</IonText
+        >
       </div>
 
       <div class="mt-6">
         <IonText class="text-sm text-muted-foreground px-4">
           {{ resultsLabel }}
         </IonText>
-        <IonList v-if="filteredItems.length > 0" lines="full" class="ion-no-padding mt-2">
-          <IonItem v-for="item in filteredItems" :key="item.id" button @click="onSelect(item)">
+        <IonList
+          v-if="filteredItems.length > 0"
+          lines="full"
+          class="ion-no-padding mt-2"
+        >
+          <IonItem
+            v-for="item in filteredItems"
+            :key="item.id"
+            button
+            @click="onSelect(item)"
+          >
             <div slot="start" class="shrink-0">
-              <div class="size-10 overflow-hidden bg-muted flex items-center justify-center rounded-full mx-3 my-2"
-                aria-hidden>
-                <img v-if="item.imageUrl" :src="item.imageUrl" :alt="item.name" class="size-full object-cover"
-                  loading="lazy" />
-                <IonIcon v-else :icon="resultLeadingIcon || ioniconsSearchOutline"
-                  class="text-2xl text-muted-foreground" aria-hidden />
+              <div
+                class="size-10 overflow-hidden bg-muted flex items-center justify-center rounded-full mx-3 my-2"
+                aria-hidden
+              >
+                <img
+                  v-if="item.imageUrl"
+                  :src="item.imageUrl"
+                  :alt="item.name"
+                  class="size-full object-cover"
+                  loading="lazy"
+                />
+                <IonIcon
+                  v-else
+                  :icon="resultLeadingIcon || ioniconsSearchOutline"
+                  class="text-2xl text-muted-foreground"
+                  aria-hidden
+                />
               </div>
             </div>
             <IonLabel>
@@ -51,7 +92,12 @@
           <IonText class="text-sm text-muted-foreground">
             <p class="mb-3">{{ emptyResultsLabel }}</p>
           </IonText>
-          <IonButton v-if="showCreateButton" expand="block" fill="outline" @click="onCreateClick">
+          <IonButton
+            v-if="showCreateButton"
+            expand="block"
+            fill="outline"
+            @click="onCreateClick"
+          >
             <IonIcon :icon="ioniconsAddOutline" slot="start" class="mr-2" />
             {{ createButtonLabel }}
           </IonButton>
@@ -62,21 +108,25 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue"
+import type { PropType } from "vue";
 
+// Type definition for entities that can be searched and displayed in the drawer
 type SearchEntity = {
-  id: string
-  name: string
-  description?: string
-  imageUrl?: string
-}
+  id: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+};
 
+// Set the component name for better debugging and devtools support
 defineOptions({
   name: "SearchDrawer",
-})
+});
 
-const open = defineModel<boolean>({ default: false })
+// Controls the open/close state of the modal
+const open = defineModel<boolean>({ default: false });
 
+// Props for customizing the search drawer's appearance and behavior
 const props = defineProps({
   title: {
     type: String,
@@ -122,62 +172,87 @@ const props = defineProps({
     type: String,
     default: "Create new",
   },
-})
+});
 
+// Emits events for parent component interaction
 const emit = defineEmits<{
-  (e: "select", item: SearchEntity): void
-  (e: "create"): void
-  (e: "scanResult", scannedCode: string): void
-}>()
+  (e: "select", item: SearchEntity): void;
+  (e: "create"): void;
+  (e: "scanResult", scannedCode: string): void;
+}>();
 
-const searchQuery = ref("")
+// The current search input from the user
+const searchQuery = ref("");
 
+/**
+ * Computed list of items filtered by the current search query.
+ * Matches against name, description, or id (case-insensitive).
+ * Used to display only relevant results in the drawer.
+ */
 const filteredItems = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase()
+  const query = searchQuery.value.trim().toLowerCase();
   if (query.length === 0) {
-    return [...props.items]
+    return [...props.items];
   }
   return props.items.filter((item) => {
-    const nameMatch = item.name.toLowerCase().includes(query)
-    const descriptionMatch = item.description?.toLowerCase().includes(query) ?? false
-    const idMatch = item.id.toLowerCase().includes(query)
-    return nameMatch || descriptionMatch || idMatch
-  })
-})
+    const nameMatch = item.name.toLowerCase().includes(query);
+    const descriptionMatch =
+      item.description?.toLowerCase().includes(query) ?? false;
+    const idMatch = item.id.toLowerCase().includes(query);
+    return nameMatch || descriptionMatch || idMatch;
+  });
+});
 
+/**
+ * Emits the 'create' event and closes the drawer.
+ * Used when the user wants to create a new entity.
+ */
 function onCreateClick() {
-  emit("create")
-  close()
+  emit("create");
+  close();
 }
 
+/**
+ * Closes the search drawer modal.
+ */
 function close() {
-  open.value = false
+  open.value = false;
 }
 
+/**
+ * Emits the 'select' event with the selected item and closes the drawer.
+ * @param {SearchEntity} item - The selected entity
+ */
 function onSelect(item: SearchEntity) {
-  emit("select", item)
-  close()
+  emit("select", item);
+  close();
 }
 
-const scanError = ref("")
+// Holds any error message from the QR code scanner
+const scanError = ref("");
 
+/**
+ * Initiates QR code scanning using the Capacitor Barcode Scanner plugin.
+ * Emits the 'scanResult' event with the scanned code if successful.
+ * Handles and displays errors if scanning fails.
+ * @returns {Promise<void>}
+ */
 async function onScanQrClick() {
-  scanError.value = ""
+  scanError.value = "";
   try {
-    const { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } = await import(
-      "@capacitor/barcode-scanner"
-    )
+    const { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } =
+      await import("@capacitor/barcode-scanner");
     const result = await CapacitorBarcodeScanner.scanBarcode({
       hint: CapacitorBarcodeScannerTypeHint.QR_CODE,
-    })
-    const code = result?.ScanResult?.trim()
+    });
+    const code = result?.ScanResult?.trim();
     if (code) {
-      close()
-      emit("scanResult", code)
+      close();
+      emit("scanResult", code);
     }
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Scan failed"
-    scanError.value = message
+    const message = e instanceof Error ? e.message : "Scan failed";
+    scanError.value = message;
   }
 }
 </script>
