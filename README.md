@@ -1,75 +1,45 @@
-# Nuxt Minimal Starter
+# Project Setup
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Requirements
 
-## Setup
+- Node v23
+- Android Studio with working emulator (only required for production build)
 
-Make sure to install dependencies:
+## How to install?
+
+> [!NOTE]  
+> Checkout the main branch and pull the latest changes before starting to set the project up.
+
+1. Install all dependencies
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+npm i
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+2. After installing the dependencies sync the latest app build
 
 ```bash
-# npm
+npm run sync:capacitor
+```
+
+3. Start the production build within the emulator
+
+```bash
+npm run sim:android
+```
+
+OR
+
+4. Start the local development server
+
+```bash
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+# Cleans the cache on start
+npm run dev:clean
 ```
 
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+To visit the local development server go to http://localhost:3000  
+All changes you make in the code will be instantly visible.
