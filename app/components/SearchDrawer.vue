@@ -21,6 +21,7 @@
           <IonIcon :icon="ioniconsQrCodeOutline" slot="start" class="mr-2" />
           {{ qrButtonLabel }}
         </IonButton>
+        <IonText v-if="scanError" color="danger" class="text-sm block mt-1 px-4">{{ scanError }}</IonText>
       </div>
 
       <div class="mt-6">
@@ -126,6 +127,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: "select", item: SearchEntity): void
   (e: "create"): void
+  (e: "scanResult", scannedCode: string): void
 }>()
 
 const searchQuery = ref("")
@@ -157,8 +159,25 @@ function onSelect(item: SearchEntity) {
   close()
 }
 
-/** QR scan – placeholder for future implementation. */
-function onScanQrClick() {
-  // TODO: Open QR scanner (e.g. Capacitor plugin)
+const scanError = ref("")
+
+async function onScanQrClick() {
+  scanError.value = ""
+  try {
+    const { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } = await import(
+      "@capacitor/barcode-scanner"
+    )
+    const result = await CapacitorBarcodeScanner.scanBarcode({
+      hint: CapacitorBarcodeScannerTypeHint.QR_CODE,
+    })
+    const code = result?.ScanResult?.trim()
+    if (code) {
+      close()
+      emit("scanResult", code)
+    }
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Scan failed"
+    scanError.value = message
+  }
 }
 </script>

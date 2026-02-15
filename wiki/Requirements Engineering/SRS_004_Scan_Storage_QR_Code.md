@@ -1,19 +1,30 @@
+### **Requirement 4: Scan Storage Location QR Code**
+
 # Header
-**Title:** Scan Storage Location
-**Number:** SRS-002
+
+**Title:** Scan Storage Location QR Code
+**Number:** SRS-004
 **State:** approved
-**Priority:** high
+**Priority:** medium
 
 # Description
-When an object has been successfully scanned,
-the system shall allow the user to scan a barcode or QR code representing a storage location.
+
+When an storage location has been successfully scanned,
+the system shall allow the user to scan a QR code representing a storage location.
 
 # Acceptance Criteria:
-- Pre-condition:
-  - An object code has been scanned successfully.
-- Success condition:
+
+- **Pre-condition:**
+  - An storage location code has been scanned successfully.
+- **Success condition:**
   - The system displays the storage location identifier (e.g. “Shelf A / Drawer 3”).
-- Failure condition:
+- **Failure condition:**
   - Invalid location codes trigger a clear error message.
-- Consistency:
+- **Consistency:**
   - The same location code always resolves to the same storage position.
+- **Usability:**
+  - A visual scanning frame is displayed to guide the user.
+- **Technical constraint:**
+  - The system supports common QR codes.
+- **Verifiability:**
+  - Scan result matches the encoded value of a known test QR Code.
