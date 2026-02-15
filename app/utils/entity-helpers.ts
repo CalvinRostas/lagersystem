@@ -2,6 +2,7 @@ import QRCode from "qrcode";
 
 /**
  * Generate a unique identifier using crypto.randomUUID() with fallback
+ * @returns {string} A unique identifier string
  */
 export function generateId(): string {
     return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -12,7 +13,7 @@ export function generateId(): string {
 /**
  * Generate a QR code data URL for the given value
  * @param value - The value to encode in the QR code
- * @returns QR code data URL or undefined if generation fails
+ * @returns {Promise<string | undefined>} QR code data URL or undefined if generation fails
  */
 export async function generateQRCode(value: string): Promise<string | undefined> {
     try {

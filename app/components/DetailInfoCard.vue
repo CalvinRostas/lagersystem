@@ -1,30 +1,36 @@
 <template>
-    <div class="rounded-lg border border-gray-200 p-4">
-        <IonText v-if="label" class="text-sm font-medium text-muted-foreground">{{ label }}</IonText>
-        <h2 :class="label ? 'text-lg font-semibold mt-2' : 'text-xl font-semibold'">{{ title }}</h2>
-        <p v-if="description" class="text-sm text-muted-foreground mt-1">
-            {{ description }}
-        </p>
-    </div>
+  <div class="rounded-lg border border-gray-200 p-4">
+    <IonText v-if="label" class="text-sm font-medium text-muted-foreground">{{
+      label
+    }}</IonText>
+    <h2 :class="label ? 'text-lg font-semibold mt-2' : 'text-xl font-semibold'">
+      {{ title }}
+    </h2>
+    <p v-if="description" class="text-sm text-muted-foreground mt-1">
+      {{ description }}
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
+// Set the component name for better debugging and devtools support
 defineOptions({
-    name: "DetailInfoCard",
-})
+  name: "DetailInfoCard",
+});
 
+// Props for customizing the card's label, title, and description
 defineProps({
-    label: {
-        type: String,
-        default: "",
-    },
-    title: {
-        type: String,
-        required: true,
-    },
-    description: {
-        type: String,
-        default: "",
-    },
-})
+  label: {
+    type: String,
+    default: "",
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+});
 </script>
