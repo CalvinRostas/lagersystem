@@ -6,15 +6,16 @@
         <IonText v-else color="medium">{{ emptyMessage }}</IonText>
 
         <div v-if="qrCodeDataUrl" class="flex gap-2 mt-2">
-            <IonButton size="small" fill="outline" @click="downloadQRCode">
+            <IonButton size="small" fill="outline" :disabled="!!actionLoading" @click="downloadQRCode">
                 <IonIcon :icon="ioniconsDownloadOutline" slot="start" />
-                Download
+                {{ actionLoading === 'download' ? 'Saving…' : 'Download' }}
             </IonButton>
-            <IonButton size="small" fill="outline" @click="printQRCode">
+            <IonButton size="small" fill="outline" :disabled="!!actionLoading" @click="printQRCode">
                 <IonIcon :icon="ioniconsPrintOutline" slot="start" />
-                Print
+                {{ actionLoading === 'print' ? 'Opening…' : 'Print' }}
             </IonButton>
         </div>
+        <IonText v-if="actionError" color="danger" class="text-sm mt-1">{{ actionError }}</IonText>
     </div>
 
     <!-- Hidden print area -->
@@ -28,6 +29,9 @@
 
 <script setup lang="ts">
 import { Capacitor } from "@capacitor/core"
+import { Filesystem, Directory } from "@capacitor/filesystem"
+import { Share } from "@capacitor/share"
+import { Printer } from "@capgo/capacitor-printer"
 
 defineOptions({
     name: "QRCodeDisplay",
@@ -53,31 +57,86 @@ const props = defineProps({
 })
 
 const qrImageRef = ref<HTMLImageElement | null>(null)
+const actionLoading = ref<"download" | "print" | "">("")
+const actionError = ref("")
 
-function downloadQRCode() {
-    if (!props.qrCodeDataUrl) return
-
-    const link = document.createElement("a")
-    link.href = props.qrCodeDataUrl
-    link.download = `qr-code-${Date.now()}.png`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+/** Extract raw base64 string from a data URL (e.g. data:image/png;base64,...). */
+function getBase64FromDataUrl(dataUrl: string): string | null {
+    const match = /^data:([^;]+);base64,(.+)$/.exec(dataUrl)
+    return match ? match[2] ?? null : null
 }
 
-function printQRCode() {
+async function downloadQRCode() {
     if (!props.qrCodeDataUrl) return
-
-    // Check if running in native app
-    if (Capacitor.isNativePlatform()) {
-        // For native platforms, fallback to download
-        // TODO: Implement native printing with Capacitor plugin if needed
-        downloadQRCode()
-        return
+    actionError.value = ""
+    actionLoading.value = "download"
+    try {
+        if (Capacitor.isNativePlatform()) {
+            const base64 = getBase64FromDataUrl(props.qrCodeDataUrl)
+            if (!base64) throw new Error("Invalid QR code image")
+            const filename = `qr-code-${Date.now()}.png`
+            const result = await Filesystem.writeFile({
+                path: filename,
+                data: base64,
+                directory: Directory.Cache,
+                recursive: true,
+            })
+            await Share.share({
+                title: props.altText,
+                url: result.uri,
+                dialogTitle: "Save or share QR code",
+            })
+        } else {
+            const link = document.createElement("a")
+            const blob = dataUrlToBlob(props.qrCodeDataUrl)
+            if (!blob) throw new Error("Invalid QR code image")
+            link.href = URL.createObjectURL(blob)
+            link.download = `qr-code-${Date.now()}.png`
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            URL.revokeObjectURL(link.href)
+        }
+    } catch (e) {
+        const message = e instanceof Error ? e.message : "Download failed"
+        actionError.value = message
+    } finally {
+        actionLoading.value = ""
     }
+}
 
-    // For web/browser, use window.print
-    window.print()
+function dataUrlToBlob(dataUrl: string): Blob | null {
+    const match = /^data:([^;]+);base64,(.+)$/.exec(dataUrl)
+    if (!match || !match[1] || !match[2]) return null
+    const mime = match[1]
+    const bin = atob(match[2])
+    const bytes = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+    return new Blob([bytes], { type: mime })
+}
+
+async function printQRCode() {
+    if (!props.qrCodeDataUrl) return
+    actionError.value = ""
+    actionLoading.value = "print"
+    try {
+        if (Capacitor.isNativePlatform()) {
+            const base64 = getBase64FromDataUrl(props.qrCodeDataUrl)
+            if (!base64) throw new Error("Invalid QR code image")
+            await Printer.printBase64({
+                name: props.altText || "QR Code",
+                data: base64,
+                mimeType: "image/png",
+            })
+        } else {
+            window.print()
+        }
+    } catch (e) {
+        const message = e instanceof Error ? e.message : "Print failed"
+        actionError.value = message
+    } finally {
+        actionLoading.value = ""
+    }
 }
 </script>
 

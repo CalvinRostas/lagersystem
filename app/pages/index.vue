@@ -15,7 +15,7 @@
         <SearchDrawer v-model="searchDrawerOpen" title="Search items" input-label="Search items"
             input-placeholder="Enter item..." input-aria-label="Search items" qr-button-label="Scan item QR code"
             :items="items" :result-leading-icon="ioniconsCubeOutline" :show-create-button="true"
-            create-button-label="Create item" @select="onSelectItem" @create="onAddItem" />
+            create-button-label="Create item" @select="onSelectItem" @create="onAddItem" @scan-result="onScanResult" />
     </IonPage>
 </template>
 
@@ -31,7 +31,7 @@ useHead({
     title: "My Items",
 })
 
-const { items } = useItems()
+const { items, getById } = useItems()
 const searchDrawerOpen = ref(false)
 
 const router = useIonRouter()
@@ -43,7 +43,6 @@ const segmentOptions = [
 
 function onSearchClick() {
     searchDrawerOpen.value = true
-    console.log("searchDrawerOpen", searchDrawerOpen.value)
 }
 
 function onSegmentChange(value: string) {
@@ -75,5 +74,14 @@ function onEditItem(_item: Item) {
 
 function onSelectItem(item: Item) {
     router.push(`/item/${item.id}`)
+}
+
+function onScanResult(scannedCode: string) {
+    const item = getById(scannedCode)
+    if (item) {
+        router.push(`/item/${item.id}`)
+    } else {
+        router.push("/item/not-found")
+    }
 }
 </script>
