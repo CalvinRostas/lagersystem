@@ -17,7 +17,7 @@ the system shall allow the user to scan a QR code representing a storage locatio
 - **Pre-condition:**
   - An storage location code has been scanned successfully.
 - **Success condition:**
-  - The system displays the storage location identifier (e.g. “Shelf A / Drawer 3”).
+  - The system correctly recognizes the QR code and displays the storage location within 2 seconds.
 - **Failure condition:**
   - Invalid location codes trigger a clear error message.
 - **Consistency:**
