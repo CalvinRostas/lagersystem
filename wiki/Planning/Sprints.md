@@ -41,3 +41,9 @@ Any new software feature based on a software requirement
 - Are all issues labeled "closed"
     - Assign to a tester if not tested yet
     - Assign unfinished issues to the next sprint or to the "Backlog"
+
+# Branching Strategy
+- Dev-Branch
+    - all unrelesed features live on the dev branch
+- Main-Branch
+    - relesed features live on the main branch and are ready for the production build
