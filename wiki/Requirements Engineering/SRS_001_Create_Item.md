@@ -9,7 +9,7 @@
 
 # Description
 
-**When** the user selects the "Create Item" function,
+**When** the user selects the "Create Item" function,  
 **the system shall** provide a form to enter item-related information and generate a QR code representing the item.
 
 # Acceptance Criteria:
