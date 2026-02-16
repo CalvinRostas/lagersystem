@@ -17,7 +17,7 @@
 - **Pre-condition:**
   - The user has granted camera permissions.
 - **Success condition:**
-  - The system correctly recognizes the QR code and displays the decoded item ID within 2 seconds.
+  - The system correctly recognizes the QR code and displays the item within 2 seconds.
 - **Failure condition:**
   - If no result for the QR code is found a "Not found" page will be shown.
 - **Consistency:**
