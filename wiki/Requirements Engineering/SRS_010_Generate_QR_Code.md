@@ -1,13 +1,13 @@
 # **Requirement 10: Generate QR Code**
 
-**Title:** Generate QR Code during Item / Storage Location Creation
-**Number:** SRS-010
-**State:** approved
-**Priority:** high
+**Title:** Generate QR Code during Item / Storage Location Creation  
+**Number:** SRS-010  
+**State:** approved  
+**Priority:** high  
 
 # Header
 
-**When** a user creates a new item / storage location,
+**When** a user creates a new item / storage location,  
 **the system shall** automatically generate a QR code containing the unique identifier of the item / storage location.
 
 # Acceptance Criteria:
