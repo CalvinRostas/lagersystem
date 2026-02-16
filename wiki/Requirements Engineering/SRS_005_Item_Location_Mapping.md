@@ -2,14 +2,14 @@
 
 # Header
 
-**Title:** Store Item Location Assignment
-**Number:** SRS-005
-**State:** approved
-**Priority:** high
+**Title:** Store Item Location Assignment  
+**Number:** SRS-005  
+**State:** approved  
+**Priority:** high  
 
 # Description
 
-**When** both an item code and a storage location code are available,
+**When** both an item code and a storage location code are available,  
 **the system shall** store the relationship between item and storage location persistently.
 
 # Acceptance Criteria:
