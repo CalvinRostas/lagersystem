@@ -14,7 +14,7 @@
       input-placeholder="Enter storage location..." input-aria-label="Search storage locations"
       qr-button-label="Scan storage QR code" :items="storageLocations" :result-leading-icon="ioniconsLocationOutline"
       :show-create-button="true" create-button-label="Create storage location" @select="onSelectStorageLocation"
-      @create="onAddStorageLocation" />
+      @create="onAddStorageLocation" @scan-result="onScanResult" />
   </IonPage>
 </template>
 
@@ -30,7 +30,7 @@ useHead({
   title: "Storage Locations",
 })
 
-const { storageLocations } = useUseStorageLocation()
+const { storageLocations, getById } = useUseStorageLocation()
 const searchDrawerOpen = ref(false)
 
 const router = useIonRouter()
@@ -67,5 +67,14 @@ function onViewStorageLocation(location: StorageLocation) {
 
 function onSelectStorageLocation(location: StorageLocation) {
   router.push(`/storage-location/${location.id}`)
+}
+
+function onScanResult(scannedCode: string) {
+  const item = getById(scannedCode)
+  if (item) {
+    router.push(`/storage-location/${item.id}`)
+  } else {
+    router.push("/storage-location/not-found")
+  }
 }
 </script>
