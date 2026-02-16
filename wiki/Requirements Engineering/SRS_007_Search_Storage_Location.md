@@ -2,14 +2,14 @@
 
 # Header
 
-**Title:** Search Storage Location
-**Number:** SRS-007
-**State:** approved
-**Priority:** medium
+**Title:** Search Storage Location  
+**Number:** SRS-007  
+**State:** approved  
+**Priority:** medium  
 
 # Description
 
-**When** the user enters an storage location name or scans an storage location qr code in the search view,
+**When** the user enters an storage location name or scans an storage location qr code in the search view,  
 **the system shall** retrieve and display the associated storage location.
 
 # Acceptance Criteria:
