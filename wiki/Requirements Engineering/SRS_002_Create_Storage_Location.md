@@ -9,7 +9,7 @@
 
 # Description
 
-**When** the user selects the “Create Storage Location” function,
+**When** the user selects the “Create Storage Location” function,  
 **the system shall** provide a form to enter storage location information and generate a QR code representing the location.
 
 # Acceptance Criteria:
