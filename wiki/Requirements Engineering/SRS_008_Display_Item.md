@@ -1,13 +1,13 @@
 # **Requirement 8: Display Item Details**
 
-**Title:** Display Item Information
-**Number:** SRS-008
-**State:** approved
-**Priority:** high
+**Title:** Display Item Information  
+**Number:** SRS-008  
+**State:** approved  
+**Priority:** high  
 
 # Header
 
-**When** an item is selected via search or list selection,
+**When** an item is selected via search or list selection,  
 **the system shall** display the item, item qr code and the assigned storage location in a structured view.
 
 # Acceptance Criteria:
