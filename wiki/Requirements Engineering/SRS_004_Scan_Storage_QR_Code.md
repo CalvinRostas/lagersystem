@@ -2,15 +2,15 @@
 
 # Header
 
-**Title:** Scan Storage Location QR Code
-**Number:** SRS-004
-**State:** approved
-**Priority:** medium
+**Title:** Scan Storage Location QR Code  
+**Number:** SRS-004  
+**State:** approved  
+**Priority:** medium  
 
 # Description
 
-When an storage location has been successfully scanned,
-the system shall allow the user to scan a QR code representing a storage location.
+**When** an storage location has been successfully scanned,  
+**the system shall** allow the user to scan a QR code representing a storage location.
 
 # Acceptance Criteria:
 
