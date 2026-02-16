@@ -2,10 +2,10 @@
 
 # Header
 
-**Title:** Create Storage Location
-**Number:** SRS-002
-**State:** approved
-**Priority:** high
+**Title:** Create Storage Location  
+**Number:** SRS-002  
+**State:** approved  
+**Priority:** high  
 
 # Description
 
