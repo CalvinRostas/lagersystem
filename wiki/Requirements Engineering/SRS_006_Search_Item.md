@@ -2,14 +2,14 @@
 
 # Header
 
-**Title:** Search Stored Item
-**Number:** SRS-006
-**State:** approved
-**Priority:** high
+**Title:** Search Stored Item  
+**Number:** SRS-006  
+**State:** approved  
+**Priority:** high  
 
 # Description
 
-**When** the user enters an item name or scans an item qr code in the search view,
+**When** the user enters an item name or scans an item qr code in the search view,  
 **the system shall** retrieve and display the associated storage location.
 
 # Acceptance Criteria:
