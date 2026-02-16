@@ -1,6 +1,6 @@
 # GitHub Project
 The actual sprint planning and kanban board can be viewed in the GitHub project
-- https://github.com/users/CalvinRostas/projects/1
+- https://github.com/users/CalvinRostas/projects/1/views/6
 
 # Sprint
 Weekly sprint
