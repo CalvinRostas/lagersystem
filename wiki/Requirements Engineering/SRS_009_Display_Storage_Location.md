@@ -1,13 +1,13 @@
 # **Requirement 9: Display Storage Location Details**
 
-**Title:** Display Storage Location Information
-**Number:** SRS-009
-**State:** approved
-**Priority:** high
+**Title:** Display Storage Location Information  
+**Number:** SRS-009  
+**State:** approved  
+**Priority:** high  
 
 # Header
 
-**When** a storage location is selected via search or list selection,
+**When** a storage location is selected via search or list selection,  
 **the system shall** display the storage location, storage location qr code and the assigned items in a structured view.
 
 # Acceptance Criteria:
