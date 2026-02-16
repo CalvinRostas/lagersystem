@@ -19,7 +19,7 @@
 - **Integrity:**
   - An item can be assigned to only one active location at a time.
 - **Performance:**
-  - Storage operation completes within 1 second.
+  - Storage operation completes within 2 second.
 
 ---
 
