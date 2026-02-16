@@ -2,10 +2,10 @@
 
 # Header
 
-**Title:** Create Item
-**Number:** SRS-001
-**State:** approved
-**Priority:** high
+**Title:** Create Item  
+**Number:** SRS-001  
+**State:** approved  
+**Priority:** high  
 
 # Description
 
